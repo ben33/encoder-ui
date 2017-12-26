@@ -1,0 +1,39 @@
+{
+  "name": "encodder-ui",
+  "author": "bfosses",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/ben33/encoder-ui.git",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node fuse",
+    "build": "node fuse build-production"
+  },
+  "devDependencies": {
+    "@types/jest": "^21.1.4",
+    "@types/node-sass": "^3.10.32",
+    "@types/react": "^16.0.14",
+    "@types/react-dom": "^16.0.1",
+    "@types/react-redux": "^5.0.10",
+    "@types/react-transition-group": "^2.0.6",
+    "@types/redux-logger": "^3.0.4",
+    "@types/uglify-js": "^2.6.29",
+    "@types/update-notifier": "^1.0.2",
+    "fuse-box": "^2.3.3",
+    "jest": "^21.2.1",
+    "node-sass": "^4.5.3",
+    "postcss-modules": "^1.1.0",
+    "redux-logger": "^3.0.6",
+    "typescript": "^2.5.2",
+    "uglify-js": "^3.1.7",
+    "update-notifier": "^2.3.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
+  }
+}

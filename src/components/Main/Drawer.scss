@@ -1,0 +1,8 @@
+.drawer{
+    max-width: 400px;
+    background: #333;
+}
+
+.drawerRight{
+    @extend .drawer;
+}
