@@ -1,0 +1,22 @@
+@import 'variables';
+
+.header{
+    background: $ms-color-themeDark;
+}
+
+.h1{
+    padding: 0.5em;
+    margin: 0;
+    line-height: 1em;
+    color: $ms-color-neutralLighterAlt;
+
+    span{
+        vertical-align: middle;
+    }
+}
+
+.logo{
+    display: inline-block;
+    margin-right: 0.5em;
+    vertical-align: middle;
+}

@@ -1,0 +1,12 @@
+{
+    "presets": [
+        "env", 
+        "react"
+    ],
+    "plugins": [
+        "transform-decorators-legacy",
+        "syntax-dynamic-import", //codesplitting
+        "react-loadable/babel",
+        ["import", { "libraryName": "antd", "style": true }] //less
+    ]
+}
