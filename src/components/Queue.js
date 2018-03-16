@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { isEqual } from 'lodash'
 import { autobind } from 'office-ui-fabric-react/lib/Utilities'
 import { DetailsList, SelectionMode, DetailsListLayoutMode, Selection } from 'office-ui-fabric-react/lib/DetailsList'
 import { ActionButton } from 'office-ui-fabric-react/lib/Button'
@@ -31,8 +32,8 @@ export default class Queue extends Component {
                     return [
                         <ActionButton key={1} iconProps={{ iconName: 'Info' }} onClick={() => alert('click Info ' + video.input)} />,
                         <ActionButton key={2} iconProps={{ iconName: 'Play' }} disabled={encoder.isProcessing} onClick={() => alert('click Play ' + video.input)} />,
-                        <ActionButton key={3} iconProps={{ iconName: 'Pause' }} disabled={!encoder.isProcessing || encoder.video !== video} onClick={() => alert('click Pause ' + video.input)} />,
-                        <ActionButton key={4} iconProps={{ iconName: 'Delete' }} disabled={encoder.isProcessing && encoder.video === video} onClick={() => alert('click Delete ' + video.input)} />
+                        <ActionButton key={3} iconProps={{ iconName: 'Pause' }} disabled={!encoder.isProcessing || !isEqual(encoder.video, video)} onClick={() => alert('click Pause ' + video.input)} />,
+                        <ActionButton key={4} iconProps={{ iconName: 'Delete' }} disabled={encoder.isProcessing && isEqual(encoder.video, video)} onClick={() => alert('click Delete ' + video.input)} />
                     ]
                 }
             },
@@ -66,8 +67,7 @@ export default class Queue extends Component {
                 maxWidth: 200,
                 isResizable: true,
                 onRender: (video) => {
-                    console.log(encoder.video == video, encoder.video, video)
-                    return encoder.isProcessing && encoder.video === video ?
+                    return encoder.isProcessing && isEqual(encoder.video, video) ?
                         <ProgressIndicator
                             label={encoder.completion.percent * 100 + '%'}
                             description={encoder.completion.remainingTime}
@@ -136,7 +136,6 @@ export default class Queue extends Component {
         if (insertIndex === -1) {
             insertIndex = 0
         }
-        console.log(insertIndex)
 
         videos.splice(insertIndex, 0, ...draggedVideos)
 
