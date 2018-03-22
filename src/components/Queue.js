@@ -12,14 +12,10 @@ let _draggedItem = null
 
 export default class Queue extends Component {
 
-    _selection
-
     constructor(props) {
         super(props)
         const { encoder } = props
         const videos = [{ input: 'test.mkv', output: 'test_encoded.mkv'}, { input: 'toto.mkv', output: 'toto_encoded.mkv' }, { input: 'toto2.mkv', output: 'toto_encoded2.mkv' }, { input: 'toto3.mkv', output: 'toto_encoded3.mkv' }]
-
-        this._selection = new Selection()
 
         const columns = [
             {
@@ -30,7 +26,11 @@ export default class Queue extends Component {
                 isPadded: true,
                 onRender: (video) => {
                     return [
-                        <ActionButton key={1} iconProps={{ iconName: 'Info' }} onClick={() => alert('click Info ' + video.input)} />,
+                        <ActionButton 
+                            key={1}
+                            iconProps={{ iconName: 'Info' }} 
+                            onClick={() => alert('click Info ' + video.input)} 
+                        />,
                         <ActionButton key={2} iconProps={{ iconName: 'Play' }} disabled={encoder.isProcessing} onClick={() => alert('click Play ' + video.input)} />,
                         <ActionButton key={3} iconProps={{ iconName: 'Pause' }} disabled={!encoder.isProcessing || !isEqual(encoder.video, video)} onClick={() => alert('click Pause ' + video.input)} />,
                         <ActionButton key={4} iconProps={{ iconName: 'Delete' }} disabled={encoder.isProcessing && isEqual(encoder.video, video)} onClick={() => alert('click Delete ' + video.input)} />
@@ -79,6 +79,7 @@ export default class Queue extends Component {
                 isPadded: true
             }
         ]
+        
         this.state = {
             columns,
             videos
@@ -96,7 +97,6 @@ export default class Queue extends Component {
                 compact={true}
                 columns={columns}
                 className={styles.queue}
-                selection={this._selection}
                 selectionMode={SelectionMode.none}
                 setKey='set'
                 layoutMode={DetailsListLayoutMode.justified}

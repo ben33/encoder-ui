@@ -1,0 +1,14 @@
+.list{
+
+    li{
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75em;
+
+        > *{
+            flex: 1;
+            margin: 0 2em 0 0;
+            text-align: left
+        }
+    }
+}

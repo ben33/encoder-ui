@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 
+import VideoSelection from './VideoSelection'
+
+import styles from '../sass/Formulaire'
+
 export default class Formulaire extends Component {
     render() {
         return (
-            <form>
-                Formulaire !
+            <form className={styles.form}>
+                <VideoSelection />
             </form>
         )
     }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { hot } from 'react-hot-loader'
 import { initializeIcons } from '@uifabric/icons'
 import { autobind } from 'office-ui-fabric-react/lib/Utilities'
 
@@ -11,7 +12,7 @@ import MyFooter from './MyFooter'
 
 import '../sass/theme.scss'
 
-export default class App extends Component {
+class App extends Component {
   
   constructor(props) {
     super(props);
@@ -31,3 +32,5 @@ export default class App extends Component {
     this.setState({isPanelOpen: true })
   }
 }
+
+export default hot(module)(App)
