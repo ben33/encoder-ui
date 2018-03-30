@@ -13,38 +13,12 @@ export default class Video extends Component {
         super(props)
 
         this.state = {
-            infos: null,
-            codecs: {}
+            codecs: null
         }
     }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        if (this.props.video !== nextProps.video) {
-            return true
-        }
-        if (!isEqual(this.state.infos, nextState.infos)) {
-            return true
-        }
-        return false
-    }
-
+    
     componentDidMount() {
-        this.fetchInfos(this.props.video)
         this.fetchCodecs()
-    }
-
-    componentDidUpdate() {
-        this.fetchInfos(this.props.video)
-    }
-
-    fetchInfos(video) {
-        axios.get(`http://localhost:8081/videos/${video}`)
-            .then(res => {
-                this.setState({ infos: res.data })
-            })
-            .catch(error => {
-                console.log(error)
-            });
     }
 
     fetchCodecs(video) {
@@ -58,16 +32,13 @@ export default class Video extends Component {
     }
 
     render() {
-        const languages = [{key: 'fre', text: 'Français'}, { key: 'eng', text: 'English' }]
+        const languages = [{ key: 'fre', text: 'Français' }, { key: 'eng', text: 'English' }]
         const { video } = this.props
-        const { infos, codecs } = this.state
+        const { codecs } = this.state
 
-        if (infos) {
-            return [
-                <VideoPreview video={video} />,
-                <VideoInfos video={video} infos={infos} codecs={codecs} languages={languages} />
-            ]
-        }
-return null
+        return codecs ? [
+            <VideoPreview video={video} />,
+            <VideoInfos {...this.props} video={video} codecs={codecs} languages={languages} />
+        ] : null
     }
 }

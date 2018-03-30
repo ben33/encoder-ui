@@ -12,89 +12,24 @@ let _draggedItem = null
 
 export default class Queue extends Component {
 
-    constructor(props) {
-        super(props)
-        const { encoder } = props
-        const videos = [{ input: 'test.mkv', output: 'test_encoded.mkv'}, { input: 'toto.mkv', output: 'toto_encoded.mkv' }, { input: 'toto2.mkv', output: 'toto_encoded2.mkv' }, { input: 'toto3.mkv', output: 'toto_encoded3.mkv' }]
+    // shouldComponentUpdate(nextProps, nextState){
+    //     return encoder queue.length
+    // }
 
-        const columns = [
-            {
-                key: 'actions',
-                name: '',
-                minWidth: 160,
-                maxWidth: 160,
-                isPadded: true,
-                onRender: (video) => {
-                    return [
-                        <ActionButton 
-                            key={1}
-                            iconProps={{ iconName: 'Info' }} 
-                            onClick={() => alert('click Info ' + video.input)} 
-                        />,
-                        <ActionButton key={2} iconProps={{ iconName: 'Play' }} disabled={encoder.isProcessing} onClick={() => alert('click Play ' + video.input)} />,
-                        <ActionButton key={3} iconProps={{ iconName: 'Pause' }} disabled={!encoder.isProcessing || !isEqual(encoder.video, video)} onClick={() => alert('click Pause ' + video.input)} />,
-                        <ActionButton key={4} iconProps={{ iconName: 'Delete' }} disabled={encoder.isProcessing && isEqual(encoder.video, video)} onClick={() => alert('click Delete ' + video.input)} />
-                    ]
-                }
-            },
-            {
-                key: 'input',
-                name: 'Video à encoder',
-                fieldName: 'input',
-                isRowHeader: true,
-                isResizable: true,
-                minWidth: 100,
-                maxWidth: 400,
-                onColumnClick: this._onColumnClick,
-                isPadded: true,
-                data: 'string'
-            },
-            {
-                key: 'output',
-                name: 'Chemin de sortie',
-                fieldName: 'output',
-                isResizable: true,
-                minWidth: 100,
-                maxWidth: 400,
-                onColumnClick: this._onColumnClick,
-                isPadded: true,
-                data: 'string'
-            },
-            {
-                key: 'progress',
-                name: 'Avancement',
-                minWidth: 100,
-                maxWidth: 200,
-                isResizable: true,
-                onRender: (video) => {
-                    return encoder.isProcessing && isEqual(encoder.video, video) ?
-                        <ProgressIndicator
-                            label={encoder.completion.percent * 100 + '%'}
-                            description={encoder.completion.remainingTime}
-                            percentComplete={encoder.completion.percent}
-                        />
-                        :
-                        null
-                },
-                isPadded: true
-            }
-        ]
-        
-        this.state = {
-            columns,
-            videos
-        }
-    }
+    // componentWillUpdate(){
+    //     this.setState({columns: this._buildColumns()})
+    // }
 
     render() {
 
-        const { encoder } = this.props
-        const { videos, columns } = this.state
+        const { encoder, queue } = this.props
+        const columns = this._buildColumns(encoder)
 
         return [
             <DetailsList
-                items={videos}
+                items={queue}
                 compact={true}
+                listProps
                 columns={columns}
                 className={styles.queue}
                 selectionMode={SelectionMode.none}
@@ -176,6 +111,74 @@ export default class Queue extends Component {
             }
             return 0
         })
+    }
+
+    _buildColumns(encoder){
+        const { startEncoder } = this.props
+        const isProcessing = encoder.status == 'processing'
+
+        return [
+            {
+                key: 'actions',
+                name: '',
+                minWidth: 160,
+                maxWidth: 160,
+                isPadded: true,
+                onRender: (video) => {
+                    return [
+                        <ActionButton 
+                            key={1}
+                            iconProps={{ iconName: 'Info' }} 
+                            onClick={() => alert('click Info ' + video.input)} 
+                        />,
+                        <ActionButton key={2} iconProps={{ iconName: 'Play' }} disabled={isProcessing} onClick={() => startEncoder(video)} />,
+                        <ActionButton key={3} iconProps={{ iconName: 'Pause' }} disabled={!isProcessing || encoder.video.id!==video.id} onClick={() => alert('click Pause ' + video.input)} />,
+                        <ActionButton key={4} iconProps={{ iconName: 'Delete' }} disabled={isProcessing && encoder.video.id===video.id} onClick={() => alert('click Delete ' + video.input)} />
+                    ]
+                }
+            },
+            {
+                key: 'input',
+                name: 'Video à encoder',
+                fieldName: 'input',
+                isRowHeader: true,
+                isResizable: true,
+                minWidth: 100,
+                maxWidth: 400,
+                onColumnClick: this._onColumnClick,
+                isPadded: true,
+                data: 'string'
+            },
+            {
+                key: 'output',
+                name: 'Chemin de sortie',
+                fieldName: 'output',
+                isResizable: true,
+                minWidth: 100,
+                maxWidth: 400,
+                onColumnClick: this._onColumnClick,
+                isPadded: true,
+                data: 'string'
+            },
+            {
+                key: 'progress',
+                name: 'Avancement',
+                minWidth: 100,
+                maxWidth: 200,
+                isResizable: true,
+                onRender: (video) => {
+                    return isProcessing && encoder.video.id===video.id ?
+                        <ProgressIndicator
+                            label={encoder.completion.percent.toFixed(2) + '%'}
+                            description={encoder.completion.remainingTime}
+                            percentComplete={encoder.completion.percent/100}
+                        />
+                        :
+                        null
+                },
+                isPadded: true
+            }
+        ]
     }
 
 }

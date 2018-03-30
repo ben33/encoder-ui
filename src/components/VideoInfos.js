@@ -10,17 +10,8 @@ import styles from '../sass/VideoInfos'
 
 export default class VideoInfos extends Component {
 
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            selection: {}
-        }
-    }
-
     render() {
-        const { video, infos, codecs, languages } = this.props
-        const { selection } = this.state
+        const { video, infos, codecs, languages, options, _onControlledCheckboxChange, _onControlledDropdownChange, _onControlledLanguageDropdownChange } = this.props
         return [
             <div>
                 <Icon iconName='OpenFile' />{video}
@@ -33,16 +24,16 @@ export default class VideoInfos extends Component {
                     {infos.video.map(piste =>
                         <li>
                             <Checkbox
-                                label={'[' + piste.index + ']: ' + piste.codec}
-                                checked={selection[piste.index]}
-                                onChange={ () => this._onControlledCheckboxChange(piste.index) }
+                                label={'[' + piste.index + (piste.id ? ':' + piste.id : '') + ']: ' + piste.codec}
+                                checked={(options[piste.index] ? true :false)}
+                                onChange={ () => _onControlledCheckboxChange(piste) }
                             />
                             <Dropdown
                                 dropdownWidth={150}
-                                disabled={!selection[piste.index]}
-                                selectedKey={ (selection[piste.index] ? selection[piste.index].encoding : 'copy') }
+                                disabled={!options[piste.index]}
+                                selectedKey={ (options[piste.index] ? options[piste.index].encoding : 'copy') }
                                 options={[{key: 'copy', text: 'copy'}, ...codecs.video]}
-                                onChanged={ (item) => this._onControlledDropdownChange(piste.index, item.key) }
+                                onChanged={ (item) => _onControlledDropdownChange(piste.index, item.key, (item.defaultOptions ? item.defaultOptions : {})) }
                             />
                             <div />
                         </li>
@@ -55,24 +46,24 @@ export default class VideoInfos extends Component {
                     {infos.audio.map(piste =>
                         <li>
                             <Checkbox
-                                label={'[' + piste.index + ']: ' + piste.language + ' / ' + piste.codec + ' / ' + piste.channel}
-                                checked={selection[piste.index]}
-                                onChange={ () => this._onControlledCheckboxChange(piste.index) }
+                                label={'[' + piste.index + (piste.id ? ':' + piste.id : '') + ']: ' + piste.language + ' / ' + piste.codec + ' / ' + piste.channel}
+                                checked={(options[piste.index] ? true :false)}
+                                onChange={ () => _onControlledCheckboxChange(piste) }
                             />
                             <Dropdown
                                 dropdownWidth={150}
-                                disabled={!selection[piste.index]}
-                                selectedKey={ (selection[piste.index] ? selection[piste.index].encoding : 'copy') }
+                                disabled={!options[piste.index]}
+                                selectedKey={ (options[piste.index] ? options[piste.index].encoding : 'copy') }
                                 options={[{key: 'copy', text: 'copy'}, ...codecs.audio]}
-                                onChanged={ (item) => this._onControlledDropdownChange(piste.index, item.key) }
+                                onChanged={ (item) => _onControlledDropdownChange(piste.index, item.key, (item.defaultOptions ? item.defaultOptions : {})) }
                             />
                             {!piste.language ?
                                 <Dropdown
                                     dropdownWidth={150}
-                                    disabled={!selection[piste.index]}
-                                    selectedKey={ (selection[piste.index] ? selection[piste.index].language : languages[0].key) }
+                                    disabled={!options[piste.index]}
+                                    selectedKey={ (options[piste.index] ? options[piste.index].language : '') }
                                     options={languages}
-                                    onChanged={ (item) => this._onControlledLanguageDropdownChange(piste.index, item.key) }
+                                    onChanged={ (item) => _onControlledLanguageDropdownChange(piste.index, item.key) }
                                 /> : <div />
                             }
                         </li>
@@ -85,18 +76,18 @@ export default class VideoInfos extends Component {
                     {infos.subtitle.map(piste =>
                         <li>
                             <Checkbox
-                                label={'[' + piste.index + ']: ' + piste.language}
-                                checked={selection[piste.index]}
-                                onChange={ () => this._onControlledCheckboxChange(piste.index) }
+                                label={'[' + piste.index + (piste.id ? ':' + piste.id : '') + ']: ' + piste.language}
+                                checked={(options[piste.index] ? true :false)}
+                                onChange={ () => _onControlledCheckboxChange(piste) }
                             />
                             <div />
                             {!piste.language ?
                                 <Dropdown
                                     dropdownWidth={150}
-                                    disabled={!selection[piste.index]}
-                                    selectedKey={ (selection[piste.index] ? selection[piste.index].language : languages[0].key) }
+                                    disabled={!options[piste.index]}
+                                    selectedKey={ (options[piste.index] ? options[piste.index].language : '') }
                                     options={languages}
-                                    onChanged={ (item) => this._onControlledLanguageDropdownChange(piste.index, item.key) }
+                                    onChanged={ (item) => _onControlledLanguageDropdownChange(piste.index, item.key) }
                                 /> : <div />
                             }
                         </li>
@@ -104,36 +95,5 @@ export default class VideoInfos extends Component {
                 </ul>
             </div>
         ]
-    }
-
-    @autobind
-    _onControlledCheckboxChange(index){
-        let selection = Object.assign(this.state.selection, {});
-        if(selection[index]){
-            delete selection[index]
-        }else{
-            selection[index] = {encoding: 'copy'}
-        }
-        this.setState({
-            selection
-        })
-    }
-
-    @autobind
-    _onControlledDropdownChange(index, value){
-        let selection = Object.assign(this.state.selection, {});
-        selection[index].encoding = value
-        this.setState({
-            selection
-        })
-    }
-
-    @autobind
-    _onControlledLanguageDropdownChange(index, value){
-        let selection = Object.assign(this.state.selection, {});
-        selection[index].encoding = value
-        this.setState({
-            selection
-        })
     }
 }

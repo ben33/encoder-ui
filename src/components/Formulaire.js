@@ -8,7 +8,7 @@ export default class Formulaire extends Component {
     render() {
         return (
             <form className={styles.form}>
-                <VideoSelection />
+                <VideoSelection {...this.props} />
             </form>
         )
     }

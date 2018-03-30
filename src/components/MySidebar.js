@@ -11,7 +11,7 @@ export default class MySidebar extends Component {
                 isOpen={isOpen}
                 type={PanelType.largeFixed}
             >
-                <Formulaire />
+                <Formulaire {...this.props} />
             </Panel>
         )
     }
