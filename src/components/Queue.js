@@ -12,18 +12,10 @@ let _draggedItem = null
 
 export default class Queue extends Component {
 
-    // shouldComponentUpdate(nextProps, nextState){
-    //     return encoder queue.length
-    // }
-
-    // componentWillUpdate(){
-    //     this.setState({columns: this._buildColumns()})
-    // }
-
     render() {
 
-        const { encoder, queue } = this.props
-        const columns = this._buildColumns(encoder)
+        const { queue } = this.props
+        const columns = this._buildColumns()
 
         return [
             <DetailsList
@@ -113,8 +105,8 @@ export default class Queue extends Component {
         })
     }
 
-    _buildColumns(encoder){
-        const { startEncoder } = this.props
+    _buildColumns(){
+        const { startEncoder, encoder } = this.props
         const isProcessing = encoder.status == 'processing'
 
         return [

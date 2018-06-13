@@ -9,6 +9,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import { DetailsList, SelectionMode, DetailsListLayoutMode, Selection } from 'office-ui-fabric-react/lib/DetailsList'
 
 import Video from './Video'
+import { subscribeToVideoSelected, subscribeToFiles } from './socket'
 
 import styles from '../sass/VideoSelection'
 
@@ -61,14 +62,16 @@ export default class VideoSelection extends Component {
 
     componentDidMount() {
         this.fetch(this.state.path)
+        subscribeToVideoSelected((infos) => {
+            this.setState({infos})
+        })
+        subscribeToFiles((files) => {
+            this.setState({files})
+        })
     }
 
     fetch(path) {
         axios.get(`http://localhost:8081/fs?path=${path}`)
-            .then(res => {
-                const files = res.data
-                this.setState({ path, files })
-            })
             .catch(error => {
                 console.log(error)
             });
@@ -178,10 +181,7 @@ export default class VideoSelection extends Component {
     }
 
     fetchInfos(video) {
-        axios.get(`http://localhost:8081/videos/${video}`)
-            .then(res => {
-                this.setState({ infos: res.data })
-            })
+        axios.post(`http://localhost:8081/videos`, {video})
             .catch(error => {
                 console.log(error)
             });
